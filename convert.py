@@ -15,7 +15,7 @@ template = Template('''<!DOCTYPE HTML>
     <title>{{ title }}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1274, user-scalable=no">
-    <link rel="stylesheet" href="themes/ribbon/styles/style.css">
+    <link rel="stylesheet" href="shower/themes/ribbon/styles/style.css">
     <style>
         #Cover H2 {
             color:#FFF;
@@ -40,7 +40,7 @@ template = Template('''<!DOCTYPE HTML>
     </div></div>
     {% endfor %}
     <div class="progress"><div></div></div>
-    <script src="scripts/script.js"></script>
+    <script src="shower/scripts/script.js"></script>
 </body>
 </html>
 ''')
@@ -49,7 +49,7 @@ template = Template('''<!DOCTYPE HTML>
 def convert(source):
     if not isinstance(source, unicode):
         source = source.decode('utf-8')
-    result = re.split(r'^====+$', source, flags=re.MULTILINE)
+    result = re.split(r'^=+\s*$', source, flags=re.MULTILINE)
     if len(result) < 2:
         raise FormatError('No header')
     elif len(result) > 2:
@@ -59,11 +59,10 @@ def convert(source):
     title = title.strip()
     body = body.strip()
 
-    # slides = re.split(r'^\s*$^\w\w*$^---+\s*$', body, flags=re.M)
-    _slides = re.split(r'^\s*$\n(?=^\w.+$\n^---+\s*$)', body, flags=re.MULTILINE|re.UNICODE)
+    _slides = re.split(r'^\s*$\n(?=^\w.+$\n^-+\s*$)', body, flags=re.MULTILINE|re.UNICODE)
     slides = []
     for slide in _slides:
-        header, body = map(unicode.strip, re.split(r'^---+\s*$', slide, flags=re.MULTILINE))
+        header, body = map(unicode.strip, re.split(r'^-+\s*$', slide, maxsplit=1, flags=re.MULTILINE))
         try:
             id, header = header.split(': ') # Space is significant
         except ValueError:
