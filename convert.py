@@ -9,7 +9,7 @@ class FormatError(ValueError):
     pass
 
 
-template = Template('''<!DOCTYPE HTML>
+template = Template(u'''<!DOCTYPE HTML>
 <html lang="en-US">
 <head>
     <title>{{ title }}</title>
@@ -27,10 +27,10 @@ template = Template('''<!DOCTYPE HTML>
 <body class="list">
     <header class="caption">
         <h1>{{ title }}</h1>
-        <p>Vladimir Epifanov, Ostrovok.ru</p>
+        <p>Владимир Епифанов, Ostrovok.ru</p>
     </header>
     {% for slide in slides %}
-    <div class="slide" id="{{ slide.id }}"><div>
+    <div class="slide{% if slide.shout %} shout{% endif %}" id="{{ slide.id }}"><div>
         <section>
             <header>
                 <h2>{{ slide.header }}</h2>
@@ -59,7 +59,7 @@ def convert(source):
     title = title.strip()
     body = body.strip()
 
-    _slides = re.split(r'^\s*$\n(?=^\w.+$\n^-+\s*$)', body, flags=re.MULTILINE|re.UNICODE)
+    _slides = re.split(r'^\s*$\n(?=^!?\w.+$\n^-+\s*$)', body, flags=re.MULTILINE|re.UNICODE)
     slides = []
     for slide in _slides:
         header, body = map(unicode.strip, re.split(r'^-+\s*$', slide, maxsplit=1, flags=re.MULTILINE))
@@ -68,10 +68,16 @@ def convert(source):
         except ValueError:
             id = filter(unicode.isalnum, header)
 
+        shout = False
+        if id.startswith('!'):
+            id = id[1:]
+            shout = True
+
         slides.append(dict(
             id=id,
             header=header,
             body=markdown.markdown(body, output_format='html5'),
+            shout=shout,
         ))
 
     return template.render(title=title, slides=slides)

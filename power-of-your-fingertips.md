@@ -5,6 +5,7 @@ who-am-i: Кто я
 ---------------
   * Владимир Епифанов
   * @voldmar
+  * voldmar@ostrovok.ru
   * разработчик
   * 6 лет FreeBSD, 5 лет Linux
   * 5 лет MacOS X
@@ -12,8 +13,6 @@ who-am-i: Кто я
 
 what-i-want: Почему мне это важно
 ------------------------
-  * img: baby fingers
-  * img: monk
 
 
 synopsis: О чём рассказ
@@ -21,9 +20,6 @@ synopsis: О чём рассказ
   * sh, bash, zsh
   * Регулярные выражения
   * sed, awk, find, grep etc
-  * ssh
-  * tmux
-  * vim
 
 sh
 --
@@ -32,6 +28,7 @@ sh
   * Если нет, то поставьте
   * zsh + Oh my zsh
   * Python, Ruby
+  * C-X C-E
 
 
 concepts: Основные концепции
@@ -39,11 +36,11 @@ concepts: Основные концепции
   * Файловая система
   * text in, text out
   * pipes
-  * 0 == True 
+  * 0 == True
 
 environment-variables: Переменные среды
 ----------------
-  * VAR=value (*без пробелов!*)
+  * VAR=value <mark>(*без пробелов!*)</mark>
   * наследование
   * export
   * передача параметров через переменные
@@ -56,8 +53,9 @@ fs: Файловая система
   * $HOME, $PWD, $OLD_PWD
   * cd
   * cd -
-  * pushd, popd
+  * pushd, popd, dirs
   * mkdir -p
+  * !$
 
 fs-patterns: Паттерны файловой системы
 --------------------------------------
@@ -66,8 +64,15 @@ fs-patterns: Паттерны файловой системы
   * ?
   * [a-b]
   * [^a-b]
+
+fs-patterns-2: Паттерны файловой системы
+--------------------------------------
   * {one,two,three}
   * mv file{,old}
+  * python convert.py text.{md,html}
+
+fs-patterns-3: Паттерны файловой системы
+--------------------------------------
   * man bash and /Pattern Matching
   * man zshexpn
 
@@ -77,6 +82,9 @@ find
   * find {path} {predicates}
   * Кавычки
   * xargs
+
+find-2: Предикаты find
+-------------
   * -name
   * -iname
   * -ftype
@@ -99,9 +107,13 @@ re: Регулярные выражения
 sed
 ---
   * ed
+  * gsed
   * sed -E
   * sed -n
   * sed -i bak
+
+sed2: Немного полезного
+------------------
   * s/foo/bar/
   * s/(foo)bar/baz\1/
   * /start/,/end/s/foo/bar/g
@@ -124,9 +136,12 @@ grep
   * grep -e
   * grep -f
   * grep -v
+
+grep-2: Ещё grep
+---------
   * grep -q
   * grep -c
-  * grep -L # TODO: GNU grep?
+  * grep -L # Files without match
   * grep -o
   * grep -A, grep -B, grep -C
   * ack
@@ -139,70 +154,108 @@ sort
 
 uniq
 ----
+  * sort -u # *ещё раз*
   * uniq -q
   * uniq -c
+  * uniq -d
 
-Exempli gratia 23
+eg: Exempli gratia
+--------------
+voldmar@air ~ % awk '{print $2}' history.txt | sort | uniq -c | sort -r | awk '$1 > 20 {print $0}'
+
+eg-2: Exempli gratia
 --------------
 <pre>
-voldmar@air ~ % awk '{print $2}' history.txt | sort | uniq -c | sort -r | awk '$1 > 20 {print $0}'
- 579 ls # Look ma, no mc!
- 386 git
- 331 cd  # Look ma, no mc again!
- 321 brew
- 280 sd
- 264 vim # Look ma, no pycharm
- 113 ssh
-  78 rm # Ma!..
-  64 mv
-  63 man # RTFM
-  59 .. # Lazy garfield pic
-  49 cat
-  47 echo
-  46 pip
-  37 which
-  36 sv
-  34 grep
-  30 f
-  28 mkdir
-  27 res
-  24 curl
-  23 source
-  23 ipython
-  21 open
+<code>579 ls # Look ma, no mc!</code>
+<code>386 git</code>
+<code>331 cd  # Look ma, no mc again!</code>
+<code>321 brew</code>
+<code>280 sd</code>
+<code>264 vim # Look ma, no pycharm</code>
+<code>113 ssh</code>
+</pre>
+
+eg-3: Exempli gratia
+--------------
+<pre>
+<code>78 rm # Ma!..</code>
+<code>64 mv</code>
+<code>63 man # RTFM</code>
+<code>59 .. # Lazy garfield pic</code>
+<code>49 cat</code>
+<code>47 echo</code>
+<code>46 pip</code>
+<code>37 which</code>
+<code>36 sv</code>
+</pre>
+
+eg-4: Exempli gratia
+--------------
+<pre>
+<code>34 grep</code>
+<code>30 f</code>
+<code>28 mkdir</code>
+<code>27 res</code>
+<code>24 curl</code>
+<code>23 source</code>
+<code>23 ipython</code>
+<code>21 open</code>
 </pre>
 
 aliases: Алиасы и функции
 -------------------------
-  * alias ..='cd ..'
-  * alias ...='cd ../..'
-  * alias ....='cd ../../..'
-  * alias cdd='cd $(python -c "import django, os.path; print os.path.dirname(django.__file__)")'
-  * alias g='grep --exclude-dir=.git --exclude=tags -RIEHn'
-  * alias ohwait="git st -s --porcelain -uall | awk '{print \$2}' | grep '[.]py\$' | xargs pyflakes"
-  * alias msh="./manage.py mshell"
-  * alias f="find . -name"
-  * alias F="find . -iname"
-  * alias vd='vim $(git diff --name-only | sort -u)'
-  * vack () { vim -q<( ack -H --nocolor --nogroup --column  "$@" ); }
+<pre>
+<code>alias ..='cd ..'</code>
+<code>alias ...='cd ../..'</code>
+<code>alias ....='cd ../../..'</code>
+</pre>
 
-  * mkmig () { ./manage.py schemamigration --auto $1 $2 }
-  * mkdmig () { ./manage.py datamigration $1 $2 }
-  * mig ()  { ./manage.py migrate $1 --ignore-ghost-migrations }
-  * alias sd="ssh dev2.ostrovok.ru"
-  * alias sv="ssh voldmar.ru"
-  * alias res="while true; do ssh -t dev2.ostrovok.ru proj/ostrota/manage.py runserver 0.0.0.0:8000; sleep 3; done"
-  * alias sres="while true; do ssh -t dev2.ostrovok.ru HTTPS=on proj/ostrota/manage.py runserver 0.0.0.0:8001; sleep 3; done"
-  * alias ipython="python $(which ipython)"
+
+aliases-2: Алиасы и функции
+-------------------------
+<pre>
+<code>alias cdd='cd $(python -c "import django, os.path; print os.path.dirname(django.__file__)")'</code>
+<code>alias g='grep --exclude-dir=.git --exclude=tags -RIEHn'</code>
+<code>alias ohwait="git st -s --porcelain -uall | awk '{print \$2}' | grep '[.]py\$' | xargs pyflakes"</code>
+<code>alias msh="./manage.py mshell"</code>
+<code>alias f="find . -name"</code>
+<code>alias F="find . -iname"</code>
+<code>alias vd='vim $(git diff --name-only | sort -u)'</code>
+</pre>
+
+
+aliases-3: Алиасы и функции
+-------------------------
+<pre>
+<code>vack () { vim -q<( ack -H --nocolor --nogroup --column  "$@" ); }</code>
+<code>mkmig () { ./manage.py schemamigration --auto $1 $2 }</code>
+<code>mkdmig () { ./manage.py datamigration $1 $2 }</code>
+<code>mig ()  { ./manage.py migrate $1 --ignore-ghost-migrations }</code>
+</pre>
+
+
+aliases-4: Алиасы и функции
+-------------------------
+<pre>
+<code>alias sd="ssh dev2.ostrovok.ru"</code>
+<code>alias sv="ssh voldmar.ru"</code>
+<code>alias res="while true; do ssh -t dev2.ostrovok.ru proj/ostrota/manage.py runserver 0.0.0.0:8000; sleep 3; done"</code>
+<code>alias sres="while true; do ssh -t dev2.ostrovok.ru HTTPS=on proj/ostrota/manage.py runserver 0.0.0.0:8001; sleep 3; done"</code>
+<code>alias ipython="python $(which ipython)"</code>
+</pre>
 
 io: Ввод-вывод в bash/zsh
 ------------------------- 
-  * >
-  * >>
+  * \>
+  * \>\>
   * <
   * <<
+
+io-2: Ввод-вывод в bash/zsh
+------------------------- 
   * <()
      * diff <( cmd1 | cmd2 ) <( cmd3 )
+  * \>()
   * $()
   * $(( ))
 
@@ -216,37 +269,6 @@ flow: Управление
   * ()
   * &, wait
 
-ssh
----
-  * Ключи
-  * ssh-add
-  * .ssh/config #TODO: check options
-  
-        Host *
-            ForwardAgent yes
-            ServerAliveInterval 20
-            ControlPersist 4h
-            TcpKeepAlive no
-            ExitOnForwardFailure yes
-            ConnectTimeout 10
-
-        Host verysecure.example.org
-            IdentityFile ~/.ssh/secure_key 
-            Port 29418
-
-  * ssh -t
-  * TODO: туннель
-  * ssh -fN -R 8022:localhost:22 dev2.ostrovok.ru
-  * TODO: sd cat .ssh/config
-
-tmux
-----
-  * Отдельная тема
-
-vim
----
-  * Отдельная большая тема
-
 macos: Маководам
 ----------------
   * iTerm 2
@@ -254,10 +276,14 @@ macos: Маководам
 
 toread: Почитать
 ----------------
-  * Зелёная книга
+  * Unix Shell Programming (3rd Edition)
   * Advanced Bash Programming
-  * Твитер
+  * @climagic
+  * http://www.catonmat.net/series/sed-one-liners-explained
+  * http://www.catonmat.net/series/awk-one-liners-explained
 
+!hiring: Островку нужно ещё больше хороших питонистов!
+---------------------------
 
 questions: Вопросы?
 ------------------
